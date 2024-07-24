@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV File uploader</title>
+    <link rel="stylesheet" href="./styles/bootstrap.min.css">
+</head>
+<body>
+    <section class="container">
+        <div class="row">
+            <div class="col">
+                <h1>CSV File uploader</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4"></div>
+            <div class="col-4">
+                <form id="csvForm">
+                    <div class="mb-3">
+                        <label for="csvFile" class="form-label">CSV File</label>
+                        <input type="file" class="form-control" id="csvFile" accept=".csv">
+                    </div>
+                    <div class="mb-3">
+                        <div class="btn btn-primary" type="submit" value="Submit"></div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-4"></div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div id="displayArea"></div>
+            </div>
+        </div>
+    </section>
+    <script src="../../../public/components/index.js"></script>
+</body>
+</html>
