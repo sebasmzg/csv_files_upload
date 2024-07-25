@@ -7,8 +7,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-export function tableTemplate(arrayTable) {
+export function renderTable(arrayTable, currentPage, recordsPerPage) {
     return __awaiter(this, void 0, void 0, function* () {
+        //start and end index
+        const start = (currentPage - 1) * recordsPerPage + 1;
+        const end = start + recordsPerPage;
+        const paginatedData = arrayTable.slice(start, end);
         return `
         <table class="table table-stripped">
             <thead>
@@ -19,20 +23,13 @@ export function tableTemplate(arrayTable) {
         }).join('')}
             <thead>
             <tbody>
-                ${arrayTable.map((value, index) => {
-            if (index === 0)
-                return `
-                        <tr>
-                            ${value.map(sub_val => {
-                    return `
-                                    <td>
-                                        ${sub_val}
-                                    </td>
-                                `;
-                }).join('')}
-                        </tr>
-                    `;
-        }).join('')}
+                ${paginatedData.slice(1).map(value => `
+                    <tr>
+                        ${value.map(sub_val => `
+                            <td>${sub_val}</td>
+                        `).join('')}
+                    </tr>
+                `).join('')}
             </tbody>
         </table>
     `;

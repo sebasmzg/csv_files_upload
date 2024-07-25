@@ -1,4 +1,9 @@
-export async function tableTemplate(arrayTable: [string[]]):Promise<string>{
+export async function renderTable(arrayTable: string[][],currentPage:number,recordsPerPage:number):Promise<string>{
+    //start and end index
+    const start = (currentPage - 1) * recordsPerPage + 1;
+    const end = start + recordsPerPage;
+    const paginatedData = arrayTable.slice(start, end)
+
     return `
         <table class="table table-stripped">
             <thead>
@@ -9,20 +14,15 @@ export async function tableTemplate(arrayTable: [string[]]):Promise<string>{
                 }).join('')}
             <thead>
             <tbody>
-                ${arrayTable.map((value, index) => {
-                    if(index === 0) return `
-                        <tr>
-                            ${value.map(sub_val =>{
-                                return `
-                                    <td>
-                                        ${sub_val}
-                                    </td>
-                                `
-                            }).join('')}
-                        </tr>
-                    `
-                }).join('')}
+                ${paginatedData.slice(1).map(value => `
+                    <tr>
+                        ${value.map(sub_val => `
+                            <td>${sub_val}</td>
+                        `).join('')}
+                    </tr>
+                `).join('')}
             </tbody>
         </table>
     `;
 }
+

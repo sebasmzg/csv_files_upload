@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CSV File uploader</title>
     <link rel="stylesheet" href="./styles/bootstrap.min.css">
+    <link rel="stylesheet" href="./styles/styles.css">
 </head>
 <body>
     <section class="container">
@@ -22,18 +23,28 @@
                         <input type="file" class="form-control" id="csvFile" accept=".csv">
                     </div>
                     <div class="mb-3">
-                        <div class="btn btn-primary" type="submit" value="Submit"></div>
+                        <input class="btn btn-primary" type="submit" value="Submit"></input>
                     </div>
                 </form>
             </div>
-            <div class="col-4"></div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label for="searchInput" class="form-label">Search</label>
+                    <input type="text" class="form-control" id="searchInput" placeholder="Search...">
+                </div>
+            </div>
         </div>
         <div class="row">
             <div class="col">
                 <div id="displayArea"></div>
+                <!-- pagination container -->
+                <nav id="paginationControls" aria-label="Page navigation" class="d-flex justify-content-center">
+                </nav>
             </div>
         </div>
     </section>
-    <script src="../../../public/components/index.js"></script>
+    <script type="module" src="../../../public/components/index.js"></script>
 </body>
 </html>
