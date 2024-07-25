@@ -1,5 +1,7 @@
+import { FileController } from "./models/fileController.js";
 import { renderTable } from "./controllers/table.js";
 import { filterData } from "./controllers/filter.js";
+import { ColumnName, DataRow } from "./models/models.js";
 
 const csvForm = <HTMLFormElement> document.getElementById('csvForm');
 const csvFile = <HTMLInputElement> document.getElementById('csvFile');
@@ -8,25 +10,30 @@ const searchInput = <HTMLInputElement> document.getElementById('searchInput');
 
 const recordsPerPage = 10;
 let currentPage = 1;
-let final_values: string[][] = [];
+let final_values: DataRow[] = [];
+let columnNames: ColumnName = [];
 
 csvForm.addEventListener('submit',async (e:Event)=>{
     e.preventDefault();
 
-    let csvReader = new FileReader();
+    const csvReader = new FileReader();
 
     const input = csvFile.files![0];
+    const fileName = input.name;
+    const fileExtension = fileName.split('.').pop()?.toLocaleLowerCase();
+
+    if(fileExtension !== 'csv' && fileExtension !== 'txt'){
+        alert('Select a .csv or .txt file');
+        return;
+    }
 
     csvReader.onload = async function(evt) {
-        const text = evt.target?.result;
-        if(typeof text === 'string' || text instanceof String){
-            const lines = text.split(/[\r\n]+/).filter(line=>line.trim()!=='');
-            //val1, val2, val3 +\n create a new line
-            final_values = lines.map(line=>line.split(','));
+        const text = evt.target?.result as string;
+        const fileHandler = new FileController(text);
+        final_values = fileHandler.getData();
+        columnNames = fileHandler.getColumnNames();
 
-            await renderTableControls()
-            
-        }
+        await renderTableControls()
     }
 
     csvReader.readAsText(input);
@@ -78,7 +85,7 @@ function pagination(totalRecords: number, currentPage:number, recordsPerPage:num
     let startPage = Math.max(1,currentPage-Math.floor(maxButtons/2));
     let endPage = Math.min(totalPages,currentPage+Math.floor(maxButtons/2));
 
-    //range
+    //adjust range
     if(endPage - startPage < maxButtons -1){
         if(startPage === 1){
             endPage = Math.min(totalPages,startPage + maxButtons -1);

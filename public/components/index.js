@@ -7,6 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+import { FileController } from "./models/fileController.js";
 import { renderTable } from "./controllers/table.js";
 import { filterData } from "./controllers/filter.js";
 const csvForm = document.getElementById('csvForm');
@@ -16,20 +17,26 @@ const searchInput = document.getElementById('searchInput');
 const recordsPerPage = 10;
 let currentPage = 1;
 let final_values = [];
+let columnNames = [];
 csvForm.addEventListener('submit', (e) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     e.preventDefault();
-    let csvReader = new FileReader();
+    const csvReader = new FileReader();
     const input = csvFile.files[0];
+    const fileName = input.name;
+    const fileExtension = (_a = fileName.split('.').pop()) === null || _a === void 0 ? void 0 : _a.toLocaleLowerCase();
+    if (fileExtension !== 'csv' && fileExtension !== 'txt') {
+        alert('Select a .csv or .txt file');
+        return;
+    }
     csvReader.onload = function (evt) {
         return __awaiter(this, void 0, void 0, function* () {
             var _a;
             const text = (_a = evt.target) === null || _a === void 0 ? void 0 : _a.result;
-            if (typeof text === 'string' || text instanceof String) {
-                const lines = text.split(/[\r\n]+/).filter(line => line.trim() !== '');
-                //val1, val2, val3 +\n create a new line
-                final_values = lines.map(line => line.split(','));
-                yield renderTableControls();
-            }
+            const fileHandler = new FileController(text);
+            final_values = fileHandler.getData();
+            columnNames = fileHandler.getColumnNames();
+            yield renderTableControls();
         });
     };
     csvReader.readAsText(input);
@@ -73,7 +80,7 @@ function pagination(totalRecords, currentPage, recordsPerPage) {
     //max buttons in view
     let startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
     let endPage = Math.min(totalPages, currentPage + Math.floor(maxButtons / 2));
-    //range
+    //adjust range
     if (endPage - startPage < maxButtons - 1) {
         if (startPage === 1) {
             endPage = Math.min(totalPages, startPage + maxButtons - 1);
