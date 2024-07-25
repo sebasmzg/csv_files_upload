@@ -10,10 +10,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 export function renderTable(arrayTable, currentPage, recordsPerPage) {
     return __awaiter(this, void 0, void 0, function* () {
         //start and end index
-        const startIndex = (currentPage - 1) * recordsPerPage + 1;
-        const endIndex = Math.min(startIndex + recordsPerPage - 1, arrayTable.length - 1);
-        //actual page
-        const pageData = [arrayTable[0], ...arrayTable.slice(startIndex, endIndex - 1)];
+        const start = (currentPage - 1) * recordsPerPage + 1;
+        const end = start + recordsPerPage;
+        const paginatedData = arrayTable.slice(start, end);
         return `
         <table class="table table-stripped">
             <thead>
@@ -24,7 +23,7 @@ export function renderTable(arrayTable, currentPage, recordsPerPage) {
         }).join('')}
             <thead>
             <tbody>
-                ${arrayTable.slice(1).map(value => `
+                ${paginatedData.slice(1).map(value => `
                     <tr>
                         ${value.map(sub_val => `
                             <td>${sub_val}</td>
@@ -35,16 +34,4 @@ export function renderTable(arrayTable, currentPage, recordsPerPage) {
         </table>
     `;
     });
-}
-//Pagination controlls
-export function pagination(totalRecords, currentPage, recordsPerPage) {
-    const totalPages = Math.ceil(totalRecords / recordsPerPage);
-    let controls = '<div class="pagination">';
-    for (let i = 1; i <= totalPages; i++) {
-        controls += `
-            <button class="pagination-button" data-page="${i}">${i}</button>
-        `;
-    }
-    controls += '</div>';
-    return controls;
 }

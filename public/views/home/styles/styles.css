@@ -1,0 +1,9 @@
+#paginationControls {
+    overflow-x: auto;
+    display: flex;
+    justify-content: center;
+}
+
+.pagination {
+    flex-wrap: nowrap;
+}

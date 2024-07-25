@@ -8,11 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { renderTable } from "./controllers/table.js";
+import { filterData } from "./controllers/filter.js";
 const csvForm = document.getElementById('csvForm');
 const csvFile = document.getElementById('csvFile');
 const displayArea = document.getElementById('displayArea');
-/* let final_values: string[][]=[]; */
-csvForm.addEventListener('submit', (e) => {
+const searchInput = document.getElementById('searchInput');
+const recordsPerPage = 15;
+let currentPage = 1;
+let final_values = [];
+csvForm.addEventListener('submit', (e) => __awaiter(void 0, void 0, void 0, function* () {
     e.preventDefault();
     let csvReader = new FileReader();
     const input = csvFile.files[0];
@@ -23,22 +27,75 @@ csvForm.addEventListener('submit', (e) => {
             if (typeof text === 'string' || text instanceof String) {
                 const lines = text.split(/[\r\n]+/).filter(line => line.trim() !== '');
                 //val1, val2, val3 +\n create a new line
-                const final_values = lines.map(line => line.split(','));
-                const result = yield renderTable(final_values);
-                displayArea.innerHTML = result;
-                const th_values = document.getElementsByTagName('th');
-                const td_values = document.getElementsByTagName('td');
-                const capitalize_table_column = (table_e) => {
-                    table_e.innerHTML = table_e.innerHTML[0].toUpperCase() + table_e.innerHTML.slice(1);
-                };
-                for (const th_val of th_values) {
-                    capitalize_table_column(th_val);
-                }
-                for (const td_val of td_values) {
-                    capitalize_table_column(td_val);
-                }
+                final_values = lines.map(line => line.split(','));
+                yield renderTableControls();
             }
         });
     };
     csvReader.readAsText(input);
-});
+}));
+searchInput.addEventListener('input', () => __awaiter(void 0, void 0, void 0, function* () {
+    yield renderTableControls();
+}));
+function renderTableControls() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const searchTerm = searchInput.value;
+        const filteredValues = filterData(final_values, searchTerm);
+        //render table with filtered values
+        const tableHTML = yield renderTable(filteredValues, currentPage, recordsPerPage);
+        displayArea.innerHTML = tableHTML;
+        //pagination controls 
+        const paginationControls = pagination(filteredValues.length, currentPage, recordsPerPage);
+        document.getElementById('paginationControls').innerHTML = paginationControls;
+        document.querySelectorAll('.page-link').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const targetPage = Number(e.target.dataset.page);
+                if (targetPage) {
+                    currentPage = targetPage;
+                    renderTableControls();
+                }
+            });
+        });
+    });
+}
+function pagination(totalRecords, currentPage, recordsPerPage) {
+    const totalPages = Math.ceil(totalRecords / recordsPerPage);
+    const maxButtons = 10;
+    let paginationHTML = '<ul class="pagination">';
+    //btn start
+    if (currentPage > 1) {
+        paginationHTML += `<li class="page-item"><a class="page-link" data-page="1" href="#">Start</a></li>`;
+    }
+    //btn previous
+    if (currentPage > 1) {
+        paginationHTML += `<li class="page-item"><a class="page-link" data-page="${currentPage - 1}" href="#">Previous</a></li>`;
+    }
+    //max buttons in view
+    let startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
+    let endPage = Math.min(totalPages, currentPage + Math.floor(maxButtons / 2));
+    //range
+    if (endPage - startPage < maxButtons - 1) {
+        if (startPage === 1) {
+            endPage = Math.min(totalPages, startPage + maxButtons - 1);
+        }
+        else if (endPage === totalPages) {
+            startPage = Math.max(1, endPage - maxButtons + 1);
+        }
+    }
+    //btn number
+    for (let i = startPage; i <= endPage; i++) {
+        paginationHTML += `<li class="page-item ${i === currentPage ? 'active' : ''}">
+            <a class="page-link" data-page="${i}" href="#">${i}</a>
+        </li>`;
+    }
+    //btn next
+    if (currentPage < totalPages) {
+        paginationHTML += `<li class="page-item"><a class="page-link" data-page="${currentPage + 1}" href="#">Next</a></li>`;
+    }
+    //btn end
+    if (currentPage < totalPages) {
+        paginationHTML += `<li class="page-item"><a class="page-link" data-page="${totalPages}" href="#">End</a></li>`;
+    }
+    paginationHTML += '</ul>';
+    return paginationHTML;
+}
