@@ -24,6 +24,7 @@ export async function downloadCSV(csvContent:string,fileName:string){
     /* URL href */
     const url = URL.createObjectURL(blob);
     link.setAttribute('href',url);
+    link.setAttribute('download',fileName)
     /* add link to nav */
     document.body.appendChild(link);
     /* trigger */
