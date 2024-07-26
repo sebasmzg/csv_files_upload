@@ -2,11 +2,13 @@ import { FileController } from "./models/fileController.js";
 import { renderTable } from "./controllers/table.js";
 import { filterData } from "./controllers/filter.js";
 import { ColumnName, DataRow } from "./models/models.js";
+import { downloadCSV,convertCsv } from "./controllers/downloadCsv.js";
 
 const csvForm = <HTMLFormElement> document.getElementById('csvForm');
 const csvFile = <HTMLInputElement> document.getElementById('csvFile');
 const displayArea = <HTMLDivElement> document.getElementById('displayArea');
 const searchInput = <HTMLInputElement> document.getElementById('searchInput');
+const downloadButton = <HTMLButtonElement> document.getElementById()
 
 const recordsPerPage = 10;
 let currentPage = 1;
