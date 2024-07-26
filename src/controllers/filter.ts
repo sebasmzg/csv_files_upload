@@ -1,4 +1,4 @@
-import { DataRow,DataTable} from "../models/models";
+import {DataTable} from "../models/models";
 
 export function filterData(arrayTable: DataTable, searchTerm: string): DataTable {
     if (!searchTerm) return arrayTable;

@@ -12,7 +12,7 @@ const downloadButton = <HTMLButtonElement> document.getElementById('downloadCSV'
 
 const recordsPerPage = 10;
 let currentPage = 1;
-let final_values: DataRow[] = [];
+let finalvalues: DataRow[] = [];
 let columnNames: ColumnName = [];
 
 document.addEventListener('DOMContentLoaded',()=>{
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded',()=>{
         csvReader.onload = async function(evt) {
             const text = evt.target?.result as string;
             const fileHandler = new FileController(text);
-            final_values = fileHandler.getData();
+            finalvalues = fileHandler.getData();
             columnNames = fileHandler.getColumnNames();
     
             await renderTableControls()
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 
     downloadButton.addEventListener('click', async (e:Event)=>{
         e.preventDefault();
-        const filteredValues = filterData(final_values,searchInput.value);
+        const filteredValues = filterData(finalvalues,searchInput.value);
         const csvData = await convertCsv(filteredValues,columnNames);
         await downloadCSV(csvData,'filtere_data.csv');
     })
@@ -57,10 +57,9 @@ document.addEventListener('DOMContentLoaded',()=>{
 })
 
 
-
 async function renderTableControls(){
     const searchTerm = searchInput.value;
-    const filteredValues = filterData(final_values,searchTerm);
+    const filteredValues = filterData(finalvalues,searchTerm);
 
     //render table with filtered values
     const tableHTML = await renderTable(filteredValues,currentPage,recordsPerPage);

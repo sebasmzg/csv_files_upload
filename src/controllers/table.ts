@@ -1,10 +1,10 @@
-import { DataRow,DataTable,ColumnName } from "../models/models";
+import { DataTable } from "../models/models";
 
 export async function renderTable(arrayTable: DataTable,currentPage:number,recordsPerPage:number):Promise<string>{
     //start and end index
     const startIndex = (currentPage - 1) * recordsPerPage;
-    const endIndex = startIndex + recordsPerPage;
-    const paginatedData = arrayTable.slice(startIndex, endIndex)
+    const finalIndex = startIndex + recordsPerPage;
+    const paginatedData = arrayTable.slice(startIndex, finalIndex)
 
     // Extract column names from the first row if available
     const columnNames = arrayTable.length > 0 ? Object.keys(arrayTable[0]) : [];

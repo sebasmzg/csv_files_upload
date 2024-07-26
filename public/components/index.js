@@ -18,7 +18,7 @@ const searchInput = document.getElementById('searchInput');
 const downloadButton = document.getElementById('downloadCSV');
 const recordsPerPage = 10;
 let currentPage = 1;
-let final_values = [];
+let finalvalues = [];
 let columnNames = [];
 document.addEventListener('DOMContentLoaded', () => {
     csvForm.addEventListener('submit', (e) => __awaiter(void 0, void 0, void 0, function* () {
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 var _a;
                 const text = (_a = evt.target) === null || _a === void 0 ? void 0 : _a.result;
                 const fileHandler = new FileController(text);
-                final_values = fileHandler.getData();
+                finalvalues = fileHandler.getData();
                 columnNames = fileHandler.getColumnNames();
                 yield renderTableControls();
             });
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }));
     downloadButton.addEventListener('click', (e) => __awaiter(void 0, void 0, void 0, function* () {
         e.preventDefault();
-        const filteredValues = filterData(final_values, searchInput.value);
+        const filteredValues = filterData(finalvalues, searchInput.value);
         const csvData = yield convertCsv(filteredValues, columnNames);
         yield downloadCSV(csvData, 'filtere_data.csv');
     }));
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function renderTableControls() {
     return __awaiter(this, void 0, void 0, function* () {
         const searchTerm = searchInput.value;
-        const filteredValues = filterData(final_values, searchTerm);
+        const filteredValues = filterData(finalvalues, searchTerm);
         //render table with filtered values
         const tableHTML = yield renderTable(filteredValues, currentPage, recordsPerPage);
         displayArea.innerHTML = tableHTML;
