@@ -16,3 +16,18 @@ export async function convertCsv(data: DataRow[],columnNames:ColumnName):Promise
 
 }
 
+export async function downloadCSV(csvContent:string,fileName:string){
+    /* Blob */
+    const blob = new Blob([csvContent], {type:'text/csv;charset=utf-8;'});
+    /* link */
+    const link = document.createElement('a');
+    /* URL href */
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href',url);
+    /* add link to nav */
+    document.body.appendChild(link);
+    /* trigger */
+    link.click();
+    /* remove link */
+    document.body.removeChild(link);
+}
