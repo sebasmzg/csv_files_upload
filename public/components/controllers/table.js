@@ -20,8 +20,10 @@ export function renderTable(arrayTable, currentPage, recordsPerPage) {
             <thead>
                 ${columnNames.map(value => `
                     <th scope="col">${value}
-                    <button class="sort-btn btn btn-outline-primary" data-column="${value}" data-order="asc">↑</button>
-                    <button class="sort-btn btn btn-outline-primary" data-column="${value}" data-order="des">↓</button>
+                        <div>
+                            <button class="sort-btn btn btn-outline-primary" data-column="${value}" data-order="asc">↑</button>
+                            <button class="sort-btn btn btn-outline-primary" data-column="${value}" data-order="des">↓</button>
+                        </div>
                     </th>
                     `).join('')}
             <thead>
