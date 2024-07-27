@@ -3,6 +3,10 @@ import { renderTable } from "./controllers/table.js";
 import { filterData } from "./controllers/filter.js";
 import { ColumnName, DataRow } from "./models/models.js";
 import { downloadCSV,convertCsv } from "./controllers/downloadCsv.js";
+import { Chart, registerables } from 'chart.js';
+
+Chart.register(...registerables);
+
 
 const csvForm = <HTMLFormElement> document.getElementById('csvForm');
 const csvFile = <HTMLInputElement> document.getElementById('csvFile');
@@ -77,6 +81,7 @@ async function renderTableControls(){
             }
         })
     })
+    chart();
 }
 
 function pagination(totalRecords: number, currentPage:number, recordsPerPage:number): string {
@@ -127,4 +132,36 @@ function pagination(totalRecords: number, currentPage:number, recordsPerPage:num
 
     paginationHTML += '</ul>';
     return paginationHTML;
+}
+
+function chart(){
+    const ctx = <HTMLCanvasElement>document.getElementById('myChart');
+    const searchTerm = searchInput.value;
+    const filteredValues = filterData(finalvalues,searchTerm);
+
+    const label = columnNames;
+    const data = filteredValues.map((row)=>row['MUNICIPIO']);
+
+    new Chart(ctx,{
+        type: 'bar',
+        data: {
+            labels: label,
+            datasets: [{
+                label: 'Municipios por departamento',
+                data: data,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales:{
+                y:{
+                    beginAtZero: true
+                }
+            }
+        }
+
+    }
+    )
 }
