@@ -69,7 +69,7 @@ function pagination(totalRecords, currentPage, recordsPerPage) {
     const totalPages = Math.ceil(totalRecords / recordsPerPage);
     const maxButtons = 10;
     let paginationHTML = '<ul class="pagination">';
-    //btn start
+    //btn startl
     if (currentPage > 1) {
         paginationHTML += `<li class="page-item"><a class="page-link" data-page="1" href="#">Start</a></li>`;
     }
@@ -79,18 +79,18 @@ function pagination(totalRecords, currentPage, recordsPerPage) {
     }
     //max buttons in view
     let startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
-    let endPage = Math.min(totalPages, currentPage + Math.floor(maxButtons / 2));
+    let finalPage = Math.min(totalPages, currentPage + Math.floor(maxButtons / 2));
     //adjust range
-    if (endPage - startPage < maxButtons - 1) {
+    if (finalPage - startPage < maxButtons - 1) {
         if (startPage === 1) {
-            endPage = Math.min(totalPages, startPage + maxButtons - 1);
+            finalPage = Math.min(totalPages, startPage + maxButtons - 1);
         }
-        else if (endPage === totalPages) {
-            startPage = Math.max(1, endPage - maxButtons + 1);
+        else if (finalPage === totalPages) {
+            startPage = Math.max(1, finalPage - maxButtons + 1);
         }
     }
     //btn number
-    for (let i = startPage; i <= endPage; i++) {
+    for (let i = startPage; i <= finalPage; i++) {
         paginationHTML += `<li class="page-item ${i === currentPage ? 'active' : ''}">
             <a class="page-link" data-page="${i}" href="#">${i}</a>
         </li>`;

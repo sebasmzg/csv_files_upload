@@ -26,7 +26,9 @@ export function renderTable(arrayTable, currentPage, recordsPerPage) {
                 ${paginatedData.map(row => `
                     <tr>
                         ${columnNames.map(columnName => `
-                            <td>${row[columnName] || ''}</td>
+                            <td>
+                                ${row[columnName] || ''}
+                            </td>
                         `).join('')}
                     </tr>
                 `).join('')}
