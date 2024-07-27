@@ -10,44 +10,54 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import { FileController } from "./models/fileController.js";
 import { renderTable } from "./controllers/table.js";
 import { filterData } from "./controllers/filter.js";
+import { downloadCSV, convertCsv } from "./controllers/downloadCsv.js";
 const csvForm = document.getElementById('csvForm');
 const csvFile = document.getElementById('csvFile');
 const displayArea = document.getElementById('displayArea');
 const searchInput = document.getElementById('searchInput');
+const downloadButton = document.getElementById('downloadCSV');
 const recordsPerPage = 10;
 let currentPage = 1;
-let final_values = [];
+let finalvalues = [];
 let columnNames = [];
-csvForm.addEventListener('submit', (e) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
-    e.preventDefault();
-    const csvReader = new FileReader();
-    const input = csvFile.files[0];
-    const fileName = input.name;
-    const fileExtension = (_a = fileName.split('.').pop()) === null || _a === void 0 ? void 0 : _a.toLocaleLowerCase();
-    if (fileExtension !== 'csv' && fileExtension !== 'txt') {
-        alert('Select a .csv or .txt file');
-        return;
-    }
-    csvReader.onload = function (evt) {
-        return __awaiter(this, void 0, void 0, function* () {
-            var _a;
-            const text = (_a = evt.target) === null || _a === void 0 ? void 0 : _a.result;
-            const fileHandler = new FileController(text);
-            final_values = fileHandler.getData();
-            columnNames = fileHandler.getColumnNames();
-            yield renderTableControls();
-        });
-    };
-    csvReader.readAsText(input);
-}));
-searchInput.addEventListener('input', () => __awaiter(void 0, void 0, void 0, function* () {
-    yield renderTableControls();
-}));
+document.addEventListener('DOMContentLoaded', () => {
+    csvForm.addEventListener('submit', (e) => __awaiter(void 0, void 0, void 0, function* () {
+        var _a;
+        e.preventDefault();
+        const csvReader = new FileReader();
+        const input = csvFile.files[0];
+        const fileName = input.name;
+        const fileExtension = (_a = fileName.split('.').pop()) === null || _a === void 0 ? void 0 : _a.toLocaleLowerCase();
+        if (fileExtension !== 'csv' && fileExtension !== 'txt') {
+            alert('Select a .csv or .txt file');
+            return;
+        }
+        csvReader.onload = function (evt) {
+            return __awaiter(this, void 0, void 0, function* () {
+                var _a;
+                const text = (_a = evt.target) === null || _a === void 0 ? void 0 : _a.result;
+                const fileHandler = new FileController(text);
+                finalvalues = fileHandler.getData();
+                columnNames = fileHandler.getColumnNames();
+                yield renderTableControls();
+            });
+        };
+        csvReader.readAsText(input);
+    }));
+    downloadButton.addEventListener('click', (e) => __awaiter(void 0, void 0, void 0, function* () {
+        e.preventDefault();
+        const filteredValues = filterData(finalvalues, searchInput.value);
+        const csvData = yield convertCsv(filteredValues, columnNames);
+        yield downloadCSV(csvData, 'filtere_data.csv');
+    }));
+    searchInput.addEventListener('input', () => __awaiter(void 0, void 0, void 0, function* () {
+        yield renderTableControls();
+    }));
+});
 function renderTableControls() {
     return __awaiter(this, void 0, void 0, function* () {
         const searchTerm = searchInput.value;
-        const filteredValues = filterData(final_values, searchTerm);
+        const filteredValues = filterData(finalvalues, searchTerm);
         //render table with filtered values
         const tableHTML = yield renderTable(filteredValues, currentPage, recordsPerPage);
         displayArea.innerHTML = tableHTML;

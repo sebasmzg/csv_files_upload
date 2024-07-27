@@ -11,8 +11,8 @@ export function renderTable(arrayTable, currentPage, recordsPerPage) {
     return __awaiter(this, void 0, void 0, function* () {
         //start and end index
         const startIndex = (currentPage - 1) * recordsPerPage;
-        const endIndex = startIndex + recordsPerPage;
-        const paginatedData = arrayTable.slice(startIndex, endIndex);
+        const finalIndex = startIndex + recordsPerPage;
+        const paginatedData = arrayTable.slice(startIndex, finalIndex);
         // Extract column names from the first row if available
         const columnNames = arrayTable.length > 0 ? Object.keys(arrayTable[0]) : [];
         return `

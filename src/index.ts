@@ -2,51 +2,65 @@ import { FileController } from "./models/fileController.js";
 import { renderTable } from "./controllers/table.js";
 import { filterData } from "./controllers/filter.js";
 import { ColumnName, DataRow } from "./models/models.js";
+import { downloadCSV,convertCsv } from "./controllers/downloadCsv.js";
 
 
 const csvForm = <HTMLFormElement> document.getElementById('csvForm');
 const csvFile = <HTMLInputElement> document.getElementById('csvFile');
 const displayArea = <HTMLDivElement> document.getElementById('displayArea');
 const searchInput = <HTMLInputElement> document.getElementById('searchInput');
+const downloadButton = <HTMLButtonElement> document.getElementById('downloadCSV')
 
 const recordsPerPage = 10;
 let currentPage = 1;
-let final_values: DataRow[] = [];
+let finalvalues: DataRow[] = [];
 let columnNames: ColumnName = [];
 
-csvForm.addEventListener('submit',async (e:Event)=>{
-    e.preventDefault();
+document.addEventListener('DOMContentLoaded',()=>{
 
-    const csvReader = new FileReader();
+    csvForm.addEventListener('submit',async (e:Event)=>{
+        e.preventDefault();
+    
+        const csvReader = new FileReader();
+    
+        const input = csvFile.files![0];
+        const fileName = input.name;
+        const fileExtension = fileName.split('.').pop()?.toLocaleLowerCase();
+    
+        if(fileExtension !== 'csv' && fileExtension !== 'txt'){
+            alert('Select a .csv or .txt file');
+            return;
+        }
+    
+        csvReader.onload = async function(evt) {
+            const text = evt.target?.result as string;
+            const fileHandler = new FileController(text);
+            finalvalues = fileHandler.getData();
+            columnNames = fileHandler.getColumnNames();
+    
+            await renderTableControls()
+        }
+    
+        csvReader.readAsText(input);
+    });
 
-    const input = csvFile.files![0];
-    const fileName = input.name;
-    const fileExtension = fileName.split('.').pop()?.toLocaleLowerCase();
+    downloadButton.addEventListener('click', async (e:Event)=>{
+        e.preventDefault();
+        const filteredValues = filterData(finalvalues,searchInput.value);
+        const csvData = await convertCsv(filteredValues,columnNames);
+        await downloadCSV(csvData,'filtere_data.csv');
+    })
+    
+    searchInput.addEventListener('input',async ()=>{
+        await renderTableControls();
+ 
+    });
+})
 
-    if(fileExtension !== 'csv' && fileExtension !== 'txt'){
-        alert('Select a .csv or .txt file');
-        return;
-    }
-
-    csvReader.onload = async function(evt) {
-        const text = evt.target?.result as string;
-        const fileHandler = new FileController(text);
-        final_values = fileHandler.getData();
-        columnNames = fileHandler.getColumnNames();
-
-        await renderTableControls()
-    }
-
-    csvReader.readAsText(input);
-});
-
-searchInput.addEventListener('input',async ()=>{
-    await renderTableControls();
-});
 
 async function renderTableControls(){
     const searchTerm = searchInput.value;
-    const filteredValues = filterData(final_values,searchTerm);
+    const filteredValues = filterData(finalvalues,searchTerm);
 
     //render table with filtered values
     const tableHTML = await renderTable(filteredValues,currentPage,recordsPerPage);
