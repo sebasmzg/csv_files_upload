@@ -3,6 +3,7 @@ import { renderTable } from "./controllers/table.js";
 import { filterData } from "./controllers/filter.js";
 import { ColumnName, DataRow } from "./models/models.js";
 import { downloadCSV,convertCsv } from "./controllers/downloadCsv.js";
+import { sortColumns } from "./controllers/sort.js";
 
 const csvForm = <HTMLFormElement> document.getElementById('csvForm');
 const csvFile = <HTMLInputElement> document.getElementById('csvFile');
@@ -59,11 +60,23 @@ document.addEventListener('DOMContentLoaded',()=>{
 
 async function renderTableControls(){
     const searchTerm = searchInput.value;
-    const filteredValues = filterData(finalvalues,searchTerm);
+    let filteredValues = filterData(finalvalues,searchTerm);
 
     //render table with filtered values
     const tableHTML = await renderTable(filteredValues,currentPage,recordsPerPage);
     displayArea.innerHTML = tableHTML;
+
+    /* sort controls */
+    document.querySelectorAll('.sort-btn').forEach(button=>{
+        button.addEventListener('click', async (e:Event)=>{
+            const column = (e.target as HTMLElement).dataset.column as string;
+            const order = (e.target as HTMLElement).dataset.order as 'asc' | 'desc';
+    
+            filteredValues = sortColumns(filteredValues,column,order);
+            renderTableControls();
+        })
+    })
+
     //pagination controls 
     const paginationControls = pagination(filteredValues.length,currentPage,recordsPerPage);
     document.getElementById('paginationControls')!.innerHTML = paginationControls;
