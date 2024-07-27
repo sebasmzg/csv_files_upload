@@ -3,6 +3,7 @@ import { renderTable } from "./controllers/table.js";
 import { filterData } from "./controllers/filter.js";
 import { ColumnName, DataRow } from "./models/models.js";
 
+
 const csvForm = <HTMLFormElement> document.getElementById('csvForm');
 const csvFile = <HTMLInputElement> document.getElementById('csvFile');
 const displayArea = <HTMLDivElement> document.getElementById('displayArea');
@@ -50,6 +51,7 @@ async function renderTableControls(){
     //render table with filtered values
     const tableHTML = await renderTable(filteredValues,currentPage,recordsPerPage);
     displayArea.innerHTML = tableHTML;
+    
     //pagination controls 
     const paginationControls = pagination(filteredValues.length,currentPage,recordsPerPage);
     document.getElementById('paginationControls')!.innerHTML = paginationControls;
@@ -63,6 +65,7 @@ async function renderTableControls(){
             }
         })
     })
+   
 }
 
 function pagination(totalRecords: number, currentPage:number, recordsPerPage:number): string {

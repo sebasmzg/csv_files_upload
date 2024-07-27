@@ -6,6 +6,7 @@
     <title>CSV File uploader</title>
     <link rel="stylesheet" href="./styles/bootstrap.min.css">
     <link rel="stylesheet" href="./styles/styles.css">
+
 </head>
 <body>
     <section class="container">
@@ -24,6 +25,8 @@
                     </div>
                     <div class="mb-3">
                         <input class="btn btn-primary" type="submit" value="Submit"></input>
+                        <!-- download Button -->
+                        <button id="downloadCSV" class="btn btn-secondary" type="button">Download CSV</button>
                     </div>
                 </form>
             </div>
@@ -45,6 +48,11 @@
             </div>
         </div>
     </section>
+    <div>
+        <canvas id="myChart"></canvas>
+    </div>
+      
     <script type="module" src="../../../public/components/index.js"></script>
+
 </body>
 </html>
