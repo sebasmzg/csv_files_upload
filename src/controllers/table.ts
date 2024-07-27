@@ -13,7 +13,10 @@ export async function renderTable(arrayTable: DataTable,currentPage:number,recor
         <table class="table table-stripped">
             <thead>
                 ${columnNames.map(value => `
-                    <th scope="col">${value}</th>
+                    <th scope="col">${value}
+                    <button class="sort-btn" data-column="${value}" data-order="asc">↑</button>
+                    <button class="sort-btn" data-column="${value}" data-order="des">↓</button>
+                    </th>
                     `).join('')}
             <thead>
             <tbody>

@@ -19,7 +19,10 @@ export function renderTable(arrayTable, currentPage, recordsPerPage) {
         <table class="table table-stripped">
             <thead>
                 ${columnNames.map(value => `
-                    <th scope="col">${value}</th>
+                    <th scope="col">${value}
+                    <button class="sort-btn" data-column="${value}" data-order="asc">↑</button>
+                    <button class="sort-btn" data-column="${value}" data-order="des">↓</button>
+                    </th>
                     `).join('')}
             <thead>
             <tbody>
