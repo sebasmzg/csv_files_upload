@@ -72,6 +72,8 @@ function renderTableControls() {
                 renderTableControls();
             }));
         });
+        //render chart
+        updateChart(filteredValues);
         //pagination controls 
         const paginationControls = pagination(filteredValues.length, currentPage, recordsPerPage);
         document.getElementById('paginationControls').innerHTML = paginationControls;
@@ -84,7 +86,12 @@ function renderTableControls() {
                 }
             });
         });
-        //chart display
+    });
+}
+//chart function
+function updateChart(chartFilteredValues) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const filteredValues = filterData(finalvalues, searchInput.value);
         yield renderChart(filteredValues);
     });
 }

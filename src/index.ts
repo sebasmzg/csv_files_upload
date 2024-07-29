@@ -1,7 +1,7 @@
 import { FileController } from "./models/fileController.js";
 import { renderTable } from "./controllers/table.js";
 import { filterData } from "./controllers/filter.js";
-import { ColumnName, DataRow } from "./models/models.js";
+import { ColumnName, DataRow, DataTable } from "./models/models.js";
 import { downloadCSV,convertCsv } from "./controllers/downloadCsv.js";
 import { sortColumns } from "./controllers/sort.js";
 import { renderChart } from "./controllers/chart.js";
@@ -56,6 +56,8 @@ document.addEventListener('DOMContentLoaded',()=>{
         await renderTableControls();
  
     });
+
+    
     
 })
 
@@ -80,6 +82,9 @@ async function renderTableControls(){
         })
     })
 
+    //render chart
+    updateChart(filteredValues);
+
     //pagination controls 
     const paginationControls = pagination(filteredValues.length,currentPage,recordsPerPage);
     document.getElementById('paginationControls')!.innerHTML = paginationControls;
@@ -94,11 +99,13 @@ async function renderTableControls(){
         })
     })
 
-    //chart display
-    await renderChart(filteredValues);
-   
 }
 
+//chart function
+async function updateChart (chartFilteredValues: DataTable) {
+    const filteredValues = filterData(finalvalues,searchInput.value);
+    await renderChart(filteredValues);
+}
 
 
 function pagination(totalRecords: number, currentPage:number, recordsPerPage:number): string {
