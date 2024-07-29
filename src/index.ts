@@ -55,6 +55,7 @@ document.addEventListener('DOMContentLoaded',()=>{
         await renderTableControls();
  
     });
+    
 })
 
 
