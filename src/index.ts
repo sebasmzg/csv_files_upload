@@ -81,14 +81,13 @@ async function renderTableControls(){
             renderTableControls();
         })
     })
-
-    //render chart
+    
     updateChart(filteredValues);
 
     //pagination controls 
     const paginationControls = pagination(filteredValues.length,currentPage,recordsPerPage);
     document.getElementById('paginationControls')!.innerHTML = paginationControls;
-
+    
     document.querySelectorAll('.page-link').forEach(button =>{
         button.addEventListener('click',(e)=>{
             const targetPage = Number((e.target as HTMLElement).dataset.page);
@@ -99,12 +98,17 @@ async function renderTableControls(){
         })
     })
 
+    
+
 }
 
-//chart function
+let currentChart: Chart | null = null;
+
 async function updateChart (chartFilteredValues: DataTable) {
-    const filteredValues = filterData(finalvalues,searchInput.value);
-    await renderChart(filteredValues);
+    if(currentChart){
+        currentChart.destroy();
+    }
+    currentChart= await renderChart(chartFilteredValues);
 }
 
 

@@ -1,4 +1,5 @@
 
+import { Title } from "chart.js";
 import { ColumnName,DataTable } from "../models/models";
 
 const chart = document.getElementById('myChart') as HTMLCanvasElement;
@@ -6,7 +7,7 @@ const canvas = chart.getContext('2d');
 let xAxis: ColumnName = [];
 let yAxis: number[] = [];
 
-export async function renderChart(data: DataTable): Promise<void> {
+export async function renderChart(data: DataTable): Promise<Chart | null> {
     if(canvas){
 
         const columnNames = Object.keys(data[0]);
@@ -17,17 +18,19 @@ export async function renderChart(data: DataTable): Promise<void> {
         xAxis = uniqueColumnValues;
         yAxis = counts;
     
-        new Chart(chart,{
+        const chartIntance = new Chart(chart,{
             type: 'bar',
             data: {
                 labels: xAxis,
                 datasets: [{
-                    label: column,
+                    label: 'Municipios por departamento',
                     data: yAxis
                 }]
-            }
+            },
         });
+        return chartIntance;
     }
+    return null;
 }
 
 

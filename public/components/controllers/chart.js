@@ -21,17 +21,19 @@ export function renderChart(data) {
             const counts = uniqueColumnValues.map(value => columnData.filter(val => val === value).length);
             xAxis = uniqueColumnValues;
             yAxis = counts;
-            new Chart(chart, {
+            const chartIntance = new Chart(chart, {
                 type: 'bar',
                 data: {
                     labels: xAxis,
                     datasets: [{
-                            label: column,
+                            label: 'Municipios por departamento',
                             data: yAxis
                         }]
-                }
+                },
             });
+            return chartIntance;
         }
+        return null;
     });
 }
 //recorrer columna
