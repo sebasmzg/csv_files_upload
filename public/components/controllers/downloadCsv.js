@@ -15,7 +15,7 @@ export function convertCsv(data, columnNames) {
         /* add rows */
         data.forEach(row => {
             const values = columnNames.map(column => row[column] || '');
-            csvRows.push(values.join(''));
+            csvRows.push(values.join(','));
         });
         return csvRows.join('\n');
     });

@@ -15,6 +15,7 @@ export function renderTable(arrayTable, currentPage, recordsPerPage) {
         const paginatedData = arrayTable.slice(startIndex, finalIndex);
         // Extract column names from the first row if available
         const columnNames = arrayTable.length > 0 ? Object.keys(arrayTable[0]) : [];
+        // Render the table
         return `
         <table class="table table-stripped">
             <thead>

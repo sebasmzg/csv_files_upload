@@ -8,7 +8,7 @@ export async function renderTable(arrayTable: DataTable,currentPage:number,recor
 
     // Extract column names from the first row if available
     const columnNames = arrayTable.length > 0 ? Object.keys(arrayTable[0]) : [];
-
+    // Render the table
     return `
         <table class="table table-stripped">
             <thead>
