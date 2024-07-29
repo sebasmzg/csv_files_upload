@@ -1,4 +1,3 @@
-import { Title } from "chart.js";
 import { ColumnName, DataTable } from "../models/models";
 
 // Get the canvas element for the chart

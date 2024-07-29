@@ -1,4 +1,4 @@
-import { DataTable, ColumnName} from "../models/models";
+import { DataTable} from "../models/models";
 // Function to sort columns
 export function sortColumns(data: DataTable, column: string, order: 'asc' | 'desc'): DataTable {
     // Return the sorted data
