@@ -27,8 +27,7 @@ export function renderChart(data) {
                     labels: xAxis,
                     datasets: [{
                             label: column,
-                            data: yAxis,
-                            borderWidth: 1
+                            data: yAxis
                         }]
                 }
             });

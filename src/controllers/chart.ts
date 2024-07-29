@@ -23,8 +23,7 @@ export async function renderChart(data: DataTable): Promise<void> {
                 labels: xAxis,
                 datasets: [{
                     label: column,
-                    data: yAxis,
-                    borderWidth: 1
+                    data: yAxis
                 }]
             }
         });

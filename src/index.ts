@@ -68,8 +68,6 @@ async function renderTableControls(){
     const tableHTML = await renderTable(filteredValues,currentPage,recordsPerPage);
     displayArea.innerHTML = tableHTML;
 
-    //chart display
-    await renderChart(filteredValues);
 
     /* sort controls */
     document.querySelectorAll('.sort-btn').forEach(button=>{
@@ -95,8 +93,13 @@ async function renderTableControls(){
             }
         })
     })
+
+    //chart display
+    await renderChart(filteredValues);
    
 }
+
+
 
 function pagination(totalRecords: number, currentPage:number, recordsPerPage:number): string {
     const totalPages = Math.ceil(totalRecords / recordsPerPage);
