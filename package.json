@@ -13,8 +13,12 @@
   "description": "",
   "devDependencies": {
     "@types/chart.js": "^2.9.41",
+<<<<<<< HEAD
     "snowpack": "^3.7.1",
     "typescript": "^5.5.4"
+=======
+    "snowpack": "^3.2.2"
+>>>>>>> b4ed2c1426f7e401f711a0bf9737b6d4348e5ae6
   },
   "dependencies": {
     "chart.js": "^4.4.3"

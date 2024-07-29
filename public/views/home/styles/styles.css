@@ -56,3 +56,14 @@ body {
     background-color: #e9ecef;
     border-color: #dee2e6;
 }
+
+/* sort btn */
+
+.sort-btn {
+    margin-left: px;
+    border-radius: 0.25rem;
+    padding: 0.2rem 0.5rem;
+    width: 1rem;
+    justify-content: center;
+
+}

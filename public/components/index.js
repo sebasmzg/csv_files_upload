@@ -11,6 +11,7 @@ import { FileController } from "./models/fileController.js";
 import { renderTable } from "./controllers/table.js";
 import { filterData } from "./controllers/filter.js";
 import { downloadCSV, convertCsv } from "./controllers/downloadCsv.js";
+import { sortColumns } from "./controllers/sort.js";
 const csvForm = document.getElementById('csvForm');
 const csvFile = document.getElementById('csvFile');
 const displayArea = document.getElementById('displayArea');
@@ -57,10 +58,19 @@ document.addEventListener('DOMContentLoaded', () => {
 function renderTableControls() {
     return __awaiter(this, void 0, void 0, function* () {
         const searchTerm = searchInput.value;
-        const filteredValues = filterData(finalvalues, searchTerm);
+        let filteredValues = filterData(finalvalues, searchTerm);
         //render table with filtered values
         const tableHTML = yield renderTable(filteredValues, currentPage, recordsPerPage);
         displayArea.innerHTML = tableHTML;
+        /* sort controls */
+        document.querySelectorAll('.sort-btn').forEach(button => {
+            button.addEventListener('click', (e) => __awaiter(this, void 0, void 0, function* () {
+                const column = e.target.dataset.column;
+                const order = e.target.dataset.order;
+                filteredValues = sortColumns(filteredValues, column, order);
+                renderTableControls();
+            }));
+        });
         //pagination controls 
         const paginationControls = pagination(filteredValues.length, currentPage, recordsPerPage);
         document.getElementById('paginationControls').innerHTML = paginationControls;
