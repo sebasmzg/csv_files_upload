@@ -12,6 +12,7 @@ import { renderTable } from "./controllers/table.js";
 import { filterData } from "./controllers/filter.js";
 import { downloadCSV, convertCsv } from "./controllers/downloadCsv.js";
 import { sortColumns } from "./controllers/sort.js";
+import { renderChart } from "./controllers/chart.js";
 const csvForm = document.getElementById('csvForm');
 const csvFile = document.getElementById('csvFile');
 const displayArea = document.getElementById('displayArea');
@@ -62,6 +63,8 @@ function renderTableControls() {
         //render table with filtered values
         const tableHTML = yield renderTable(filteredValues, currentPage, recordsPerPage);
         displayArea.innerHTML = tableHTML;
+        //chart display
+        yield renderChart(filteredValues);
         /* sort controls */
         document.querySelectorAll('.sort-btn').forEach(button => {
             button.addEventListener('click', (e) => __awaiter(this, void 0, void 0, function* () {

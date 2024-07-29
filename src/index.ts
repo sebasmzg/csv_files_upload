@@ -4,6 +4,7 @@ import { filterData } from "./controllers/filter.js";
 import { ColumnName, DataRow } from "./models/models.js";
 import { downloadCSV,convertCsv } from "./controllers/downloadCsv.js";
 import { sortColumns } from "./controllers/sort.js";
+import { renderChart } from "./controllers/chart.js";
 
 const csvForm = <HTMLFormElement> document.getElementById('csvForm');
 const csvFile = <HTMLInputElement> document.getElementById('csvFile');
@@ -66,6 +67,9 @@ async function renderTableControls(){
     //render table with filtered values
     const tableHTML = await renderTable(filteredValues,currentPage,recordsPerPage);
     displayArea.innerHTML = tableHTML;
+
+    //chart display
+    await renderChart(filteredValues);
 
     /* sort controls */
     document.querySelectorAll('.sort-btn').forEach(button=>{
