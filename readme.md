@@ -34,3 +34,10 @@ This allows for easy reorganization of your data to find trends and compare valu
 --View Dynamic Charts:
 As you filter the data, the chart at the bottom of the screen will automatically update to reflect the current table data.
 This provides a visual representation of your dataset, making it easier to analyze trends and patterns.
+
+
+--GITHUB REPOSITORY:
+https://github.com/sebasmzg/csv_files_upload.git
+
+--VIDEO EXPLANATION
+https://www.loom.com/share/1aa8a31e3a2244f290ca65ce521d7c70?sid=a31ef90c-cef4-405f-bf47-e072ac6fa02c
