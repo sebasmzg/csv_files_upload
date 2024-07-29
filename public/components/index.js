@@ -12,16 +12,20 @@ import { renderTable } from "./controllers/table.js";
 import { filterData } from "./controllers/filter.js";
 import { downloadCSV, convertCsv } from "./controllers/downloadCsv.js";
 import { sortColumns } from "./controllers/sort.js";
+import { renderChart } from "./controllers/chart.js";
+// Get DOM elements
 const csvForm = document.getElementById('csvForm');
 const csvFile = document.getElementById('csvFile');
 const displayArea = document.getElementById('displayArea');
 const searchInput = document.getElementById('searchInput');
 const downloadButton = document.getElementById('downloadCSV');
+// Set initial values
 const recordsPerPage = 10;
 let currentPage = 1;
 let finalvalues = [];
 let columnNames = [];
 document.addEventListener('DOMContentLoaded', () => {
+    // Handle form submission
     csvForm.addEventListener('submit', (e) => __awaiter(void 0, void 0, void 0, function* () {
         var _a;
         e.preventDefault();
@@ -45,24 +49,27 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         csvReader.readAsText(input);
     }));
+    // Handle download button click
     downloadButton.addEventListener('click', (e) => __awaiter(void 0, void 0, void 0, function* () {
         e.preventDefault();
         const filteredValues = filterData(finalvalues, searchInput.value);
         const csvData = yield convertCsv(filteredValues, columnNames);
         yield downloadCSV(csvData, 'filtere_data.csv');
     }));
+    // Handle search input change
     searchInput.addEventListener('input', () => __awaiter(void 0, void 0, void 0, function* () {
         yield renderTableControls();
     }));
 });
+// Render table controls
 function renderTableControls() {
     return __awaiter(this, void 0, void 0, function* () {
         const searchTerm = searchInput.value;
         let filteredValues = filterData(finalvalues, searchTerm);
-        //render table with filtered values
+        // Render table with filtered values
         const tableHTML = yield renderTable(filteredValues, currentPage, recordsPerPage);
         displayArea.innerHTML = tableHTML;
-        /* sort controls */
+        /* Sort controls */
         document.querySelectorAll('.sort-btn').forEach(button => {
             button.addEventListener('click', (e) => __awaiter(this, void 0, void 0, function* () {
                 const column = e.target.dataset.column;
@@ -71,7 +78,9 @@ function renderTableControls() {
                 renderTableControls();
             }));
         });
-        //pagination controls 
+        // Render chart
+        updateChart(filteredValues);
+        // Pagination controls
         const paginationControls = pagination(filteredValues.length, currentPage, recordsPerPage);
         document.getElementById('paginationControls').innerHTML = paginationControls;
         document.querySelectorAll('.page-link').forEach(button => {
@@ -85,22 +94,34 @@ function renderTableControls() {
         });
     });
 }
+// Chart instance
+let currentChart = null;
+// Chart function
+function updateChart(chartFilteredValues) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (currentChart) {
+            currentChart.destroy();
+        }
+        currentChart = yield renderChart(chartFilteredValues);
+    });
+}
+// Pagination function
 function pagination(totalRecords, currentPage, recordsPerPage) {
     const totalPages = Math.ceil(totalRecords / recordsPerPage);
     const maxButtons = 10;
     let paginationHTML = '<ul class="pagination">';
-    //btn startl
+    // Start button
     if (currentPage > 1) {
         paginationHTML += `<li class="page-item"><a class="page-link" data-page="1" href="#">Start</a></li>`;
     }
-    //btn previous
+    // Previous button
     if (currentPage > 1) {
         paginationHTML += `<li class="page-item"><a class="page-link" data-page="${currentPage - 1}" href="#">Previous</a></li>`;
     }
-    //max buttons in view
+    // Max buttons in view
     let startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
     let finalPage = Math.min(totalPages, currentPage + Math.floor(maxButtons / 2));
-    //adjust range
+    // Adjust range
     if (finalPage - startPage < maxButtons - 1) {
         if (startPage === 1) {
             finalPage = Math.min(totalPages, startPage + maxButtons - 1);
@@ -109,17 +130,17 @@ function pagination(totalRecords, currentPage, recordsPerPage) {
             startPage = Math.max(1, finalPage - maxButtons + 1);
         }
     }
-    //btn number
+    // Number buttons
     for (let i = startPage; i <= finalPage; i++) {
         paginationHTML += `<li class="page-item ${i === currentPage ? 'active' : ''}">
             <a class="page-link" data-page="${i}" href="#">${i}</a>
         </li>`;
     }
-    //btn next
+    // Next button
     if (currentPage < totalPages) {
         paginationHTML += `<li class="page-item"><a class="page-link" data-page="${currentPage + 1}" href="#">Next</a></li>`;
     }
-    //btn end
+    // End button
     if (currentPage < totalPages) {
         paginationHTML += `<li class="page-item"><a class="page-link" data-page="${totalPages}" href="#">End</a></li>`;
     }

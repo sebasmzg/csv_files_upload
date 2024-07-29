@@ -1,57 +1,48 @@
-"use strict";
-/* import { Chart, registerables } from 'chart.js';
-Chart.register(...registerables);
-
-import{ ColumnName, DataTable } from '../models/models.js';
-
-// Define a function to create or update the chart
-export function createOrUpdateChart(
-    dataTable: DataTable,
-    columnNames: ColumnName,
-    chartElementId: string,
-    chartInstance?: Chart
-): Chart {
-    const ctx = document.getElementById(chartElementId) as HTMLCanvasElement;
-
-    // Prepare data for the chart
-    const labels = columnNames;
-    const data = labels.map(column => {
-        const columnData = dataTable.map(row => parseFloat(row[column]) || 0);
-        return columnData.reduce((a, b) => a + b, 0); // Aggregate values (e.g., sum)
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-
-    if (chartInstance) {
-        // Update the existing chart
-        chartInstance.data.labels = labels;
-        chartInstance.data.datasets[0].data = data;
-        chartInstance.update();
-        return chartInstance;
-    } else {
-        // Create a new chart
-        return new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Dataset',
-                    data: data,
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x: {
-                        beginAtZero: true
-                    },
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    }
+};
+// Get the canvas element for the chart
+const chart = document.getElementById('myChart');
+const canvas = chart.getContext('2d');
+// Initialize the x-axis and y-axis arrays
+let xAxis = [];
+let yAxis = [];
+// Function to render the chart
+export function renderChart(data) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (canvas) {
+            // Get the column names from the data
+            const columnNames = Object.keys(data[0]);
+            // Select the column to be used for the chart
+            const column = columnNames[2];
+            // Get the data for the selected column
+            const columnData = data.map(row => row[column]);
+            // Get the unique values in the column
+            const uniqueColumnValues = [...new Set(columnData)];
+            // Count the occurrences of each unique value
+            const counts = uniqueColumnValues.map(value => columnData.filter(val => val === value).length);
+            // Assign the x-axis and y-axis values
+            xAxis = uniqueColumnValues;
+            yAxis = counts;
+            // Create a new chart instance
+            const chartInstance = new Chart(chart, {
+                type: 'bar',
+                data: {
+                    labels: xAxis,
+                    datasets: [{
+                            label: 'Municipios por departamento',
+                            data: yAxis
+                        }]
+                },
+            });
+            return chartInstance;
+        }
+        return null;
+    });
 }
- */ 
